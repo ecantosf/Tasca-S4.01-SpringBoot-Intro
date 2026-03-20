@@ -19,28 +19,36 @@
 
 ## 📖 Introduction
 
-This project is a robust **REST API** for user management, developed using **Spring Boot 3**. The main objective was to apply a strict **Layered Architecture**, ensuring decoupling between business logic, service exposure, and in-memory data persistence.
+This project is a robust **REST API** for user management, developed using **Spring Boot 3** as part of the IT Academy Java Bootcamp. The main objective is to learn and apply the fundamentals of Spring Boot, REST API development, and layered architecture.
 
-The application has been validated through a comprehensive testing strategy, combining unit, integration, and web layer tests to guarantee endpoint stability.
+The project is structured in three progressive levels:
+
+- **Level 1:** Basic API setup with health check endpoint, JSON responses, testing with MockMvc, and JAR packaging.
+- **Level 2:** Complete CRUD operations for user management with in-memory persistence.
+- **Level 3:** Advanced testing, error handling, and architectural refinements.
 
 ---
 
 ## 🏗️ Project Architecture
 
-Following **SOLID** principles, the application is divided into clear responsibilities to facilitate maintenance and scalability.
+Following **SOLID** principles and **Layered Architecture**, the application is divided into clear responsibilities to facilitate maintenance and scalability.
 
 ### Directory Hierarchy
+
 ```text
 userapi
 ├── src/main/java/cat/itacademy/s04/t01/userapi
-│   ├── controller       # REST Endpoints (Health & User)
-│   ├── service          # Service Layer (Business Logic)
-│   ├── repository       # Persistence Layer (InMemory)
-│   ├── entity           # Domain Models (User)
-│   ├── dto              # Transfer Objects (HealthStatus)
-│   └── exception        # Custom Exceptions (404, 409)
-├── src/test/java        # Full Test Suite
-└── target               # Compiled Artifacts (.jar)
+│   ├── UserapiApplication.java   # Main application entry point
+│   ├── controller/               # REST endpoints (Health & User)
+│   ├── service/                  # Business logic layer
+│   ├── repository/               # Data access layer (in-memory)
+│   ├── model/                    # Domain models (User, HealthResponse)
+│   └── exception/                # Custom exceptions (prepared for Level 3)
+├── src/test/java/                # Full test suite
+│   └── controller/               # Web layer tests with MockMvc
+├── src/main/resources/
+│   └── application.properties    # Configuration (server.port=9000)
+└── target/                       # Compiled artifacts (.jar)
 ```
 ---
 
