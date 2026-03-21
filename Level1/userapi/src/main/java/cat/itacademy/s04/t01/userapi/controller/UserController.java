@@ -9,7 +9,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    
+
     private List<User> users = new ArrayList<>();
 
     @GetMapping
