@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -14,8 +15,15 @@ public class UserController {
     private List<User> users = new ArrayList<>();
 
     @GetMapping
-    public List<User> getUsers() {
-        return users;
+    public List<User> getUsers(@RequestParam(required = false) String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return users;
+        }
+
+        return users.stream()
+                .filter(user -> user.getName().toLowerCase()
+                        .contains(name.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     @PostMapping
@@ -29,7 +37,6 @@ public class UserController {
     @GetMapping("/{id}")
     public User getUserById(@PathVariable String id) {
         UUID uuid = UUID.fromString(id);
-
         return users.stream()
                 .filter(user -> user.getId().equals(uuid))
                 .findFirst()
