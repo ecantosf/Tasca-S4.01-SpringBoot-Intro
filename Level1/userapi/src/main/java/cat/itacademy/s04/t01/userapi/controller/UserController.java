@@ -42,4 +42,8 @@ public class UserController {
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
+
+    void clearUsers() {
+        users.clear();
+    }
 }
