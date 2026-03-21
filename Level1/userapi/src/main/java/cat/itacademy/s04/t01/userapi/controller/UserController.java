@@ -22,9 +22,17 @@ public class UserController {
     public User createUser(@RequestBody User user) {
         UUID id = UUID.randomUUID();
         user.setId(id);
-
         users.add(user);
-
         return user;
+    }
+
+    @GetMapping("/{id}")
+    public User getUserById(@PathVariable String id) {
+        UUID uuid = UUID.fromString(id);
+
+        return users.stream()
+                .filter(user -> user.getId().equals(uuid))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 }
