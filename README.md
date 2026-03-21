@@ -26,15 +26,75 @@ layered architecture.
 The project is structured in three progressive levels:
 
 - **Level 1:** Basic API setup with health check endpoint, JSON responses, testing with MockMvc, and JAR packaging.
-***Achievements:
-	- Initial Spring Boot project setup with Maven
-	- Changed default port from 8080 to 9000
-	- Created a health check endpoint (/health)
-	- Structured response in JSON format
-	- Automated tests with MockMvc
-	- Packaging and execution as an executable JAR
 - **Level 2:** Complete CRUD operations for user management with in-memory persistence.
 - **Level 3:** Advanced testing, error handling, and architectural refinements.
+
+---
+
+## 📊 Level 1: API Fundamentals
+
+The first level establishes the foundation of a Spring Boot REST API.
+
+### ✅ Key Achievements
+
+| Concept | Implementation |
+|---------|----------------|
+| **Health Check Endpoint** | `GET /health` returns `{"status": "OK"}` in JSON format |
+| **REST Controller** | `@RestController` with `@GetMapping` mapping |
+| **JSON Serialization** | Using Jackson to convert Java objects to JSON |
+| **Manual Testing** | Verified with browser and Postman |
+| **Automated Testing** | `@WebMvcTest` with MockMvc validates endpoint behavior |
+| **JAR Packaging** | `mvn clean package` generates executable JAR with embedded Tomcat |
+| **Maven Wrapper** | `./mvnw` allows building without Maven installation |
+
+### 🔧 Technologies Used in Level 1
+
+| Technology | Purpose |
+|------------|---------|
+| Spring Boot 3.2.11 | Framework core |
+| Spring Web | REST controller support |
+| Spring Boot DevTools | Auto-restart during development |
+| Spring Boot Starter Test | MockMvc, JUnit 5, Mockito |
+| Jackson | JSON serialization |
+| Maven Wrapper | Build tool without local installation |
+| Postman | Manual API testing |
+
+### 📝 Endpoints (Level 1)
+
+| Method | Endpoint | Description | Response |
+|--------|----------|-------------|----------|
+| GET | `/health` | Service health check | `{"status": "OK"}` |
+
+---
+
+## 📊 Level 2: User Management CRUD
+
+The second level implements complete user management functionality using an in-memory list as a temporary persistence system.
+
+### ✅ Key Achievements
+
+| Concept | Implementation |
+|---------|----------------|
+| **User Model** | `User` class with `UUID` id, name, and email |
+| **Create User** | `POST /users` with JSON body, auto-generates UUID |
+| **List Users** | `GET /users` returns all users |
+| **Get User by ID** | `GET /users/{id}` retrieves a specific user |
+| **Filter by Name** | `GET /users?name=...` with case-insensitive partial matching |
+| **In-Memory Storage** | `ArrayList<User>` acts as temporary database |
+| **Web Layer Tests** | Comprehensive tests with `@WebMvcTest` and MockMvc |
+| **Test Isolation** | `@BeforeEach` clears the list before each test |
+
+### 🔧 Technologies Used in Level 2
+
+| Technology | Purpose |
+|------------|---------|
+| Spring Boot 3.2.11 | Framework core |
+| Spring Web | REST controllers and HTTP handling |
+| Java UUID | Unique identifier generation |
+| Java Streams | Filtering collections with `filter()` and `collect()` |
+| MockMvc | Web layer testing without server |
+| JUnit 5 | Test framework |
+| ObjectMapper | Java ↔ JSON conversion in tests |
 
 ---
 
@@ -49,12 +109,18 @@ userapi
 ├── src/main/java/cat/itacademy/s04/t01/userapi
 │   ├── UserapiApplication.java   # Main application entry point
 │   ├── controller/               # REST endpoints (Health & User)
-│   ├── service/                  # Business logic layer
-│   ├── repository/               # Data access layer (in-memory)
-│   ├── model/                    # Domain models (User, HealthResponse)
+│   │   ├── HealthController.java
+│   │   └── UserController.java
+│   ├── service/                  # Business logic layer (prepared for Level 3)
+│   ├── repository/               # Data access layer (prepared for Level 3)
+│   ├── model/                    # Domain models
+│   │   ├── HealthResponse.java
+│   │   └── User.java
 │   └── exception/                # Custom exceptions (prepared for Level 3)
 ├── src/test/java/                # Full test suite
 │   └── controller/               # Web layer tests with MockMvc
+│       ├── HealthControllerTest.java
+│       └── UserControllerTest.java
 ├── src/main/resources/
 │   └── application.properties    # Configuration (server.port=9000)
 └── target/                       # Compiled artifacts (.jar)
