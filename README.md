@@ -19,11 +19,20 @@
 
 ## 📖 Introduction
 
-This project is a robust **REST API** for user management, developed using **Spring Boot 3** as part of the IT Academy Java Bootcamp. The main objective is to learn and apply the fundamentals of Spring Boot, REST API development, and layered architecture.
+This project is a robust **REST API** for user management, developed using **Spring Boot 3** as part of the IT Academy 
+Java Bootcamp. The main objective is to learn and apply the fundamentals of Spring Boot, REST API development, and 
+layered architecture.
 
 The project is structured in three progressive levels:
 
 - **Level 1:** Basic API setup with health check endpoint, JSON responses, testing with MockMvc, and JAR packaging.
+***Achievements:
+	- Initial Spring Boot project setup with Maven
+	- Changed default port from 8080 to 9000
+	- Created a health check endpoint (/health)
+	- Structured response in JSON format
+	- Automated tests with MockMvc
+	- Packaging and execution as an executable JAR
 - **Level 2:** Complete CRUD operations for user management with in-memory persistence.
 - **Level 3:** Advanced testing, error handling, and architectural refinements.
 
