@@ -125,6 +125,26 @@ userapi
 │   └── application.properties    # Configuration (server.port=9000)
 └── target/                       # Compiled artifacts (.jar)
 ```
+
+---
+
+## 📌 Project Evolution Strategy
+
+This project is developed in three progressive levels. To maintain a clear history 
+and facilitate evaluation, the following Git structure has been adopted:
+
+- **Branch `main`**: Contains the complete work from Levels 1 and 2
+- **Tag `level2-completed`**: Marks the exact state after completing Level 2
+- **Branch `level3-refactoring`**: Contains the ongoing work for Level 3
+
+### How to review
+
+| Level | Branch / Tag | Command to checkout |
+|-------|--------------|---------------------|
+| Level 1 | `main` (initial commits) | `git checkout main` |
+| Level 2 | `level2-completed` tag | `git checkout level2-completed` |
+| Level 3 | `level3-refactoring` branch | `git checkout level3-refactoring` |
+
 ---
 
 ## 🚀 Key Features
