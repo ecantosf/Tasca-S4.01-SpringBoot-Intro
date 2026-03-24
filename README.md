@@ -7,29 +7,24 @@
 
 *(IT Academy Java Bootcamp - Spring Boot Fundamentals)*
 
----
-
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
 ![Maven](https://img.shields.io/badge/Apache%20Maven-C71A36?style=for-the-badge&logo=Apache%20Maven&logoColor=white)
 ![JUnit 5](https://img.shields.io/badge/JUnit%205-25A162?style=for-the-badge&logo=junit5&logoColor=white)
+![Mockito](https://img.shields.io/badge/Mockito-8A2BE2?style=for-the-badge&logo=mockito&logoColor=white)
 </div>
-
----
 
 ## 📖 Introduction
 
-This project is a robust **REST API** for user management, developed using **Spring Boot 3** as part of the IT Academy 
-Java Bootcamp. The main objective is to learn and apply the fundamentals of Spring Boot, REST API development, and 
-layered architecture.
+This project is a robust **REST API** for user management, developed using **Spring Boot 3** as part 
+of the IT Academy Java Bootcamp. The main objective is to learn and apply the fundamentals of Spring 
+Boot, REST API development, and layered architecture.
 
 The project is structured in three progressive levels:
 
 - **Level 1:** Basic API setup with health check endpoint, JSON responses, testing with MockMvc, and JAR packaging.
 - **Level 2:** Complete CRUD operations for user management with in-memory persistence.
-- **Level 3:** Advanced testing, error handling, and architectural refinements.
-
----
+- **Level 3:** Layered architecture, TDD, global exception handling, and advanced testing with Mockito.
 
 ## 📊 Level 1: API Fundamentals
 
@@ -47,29 +42,16 @@ The first level establishes the foundation of a Spring Boot REST API.
 | **JAR Packaging** | `mvn clean package` generates executable JAR with embedded Tomcat |
 | **Maven Wrapper** | `./mvnw` allows building without Maven installation |
 
-### 🔧 Technologies Used in Level 1
-
-| Technology | Purpose |
-|------------|---------|
-| Spring Boot 3.2.11 | Framework core |
-| Spring Web | REST controller support |
-| Spring Boot DevTools | Auto-restart during development |
-| Spring Boot Starter Test | MockMvc, JUnit 5, Mockito |
-| Jackson | JSON serialization |
-| Maven Wrapper | Build tool without local installation |
-| Postman | Manual API testing |
-
 ### 📝 Endpoints (Level 1)
 
 | Method | Endpoint | Description | Response |
 |--------|----------|-------------|----------|
 | GET | `/health` | Service health check | `{"status": "OK"}` |
 
----
-
 ## 📊 Level 2: User Management CRUD
 
-The second level implements complete user management functionality using an in-memory list as a temporary persistence system.
+The second level implements complete user management functionality using an in-memory list as a 
+temporary persistence system.
 
 ### ✅ Key Achievements
 
@@ -82,21 +64,81 @@ The second level implements complete user management functionality using an in-m
 | **Filter by Name** | `GET /users?name=...` with case-insensitive partial matching |
 | **In-Memory Storage** | `ArrayList<User>` acts as temporary database |
 | **Web Layer Tests** | Comprehensive tests with `@WebMvcTest` and MockMvc |
-| **Test Isolation** | `@BeforeEach` clears the list before each test |
 
-### 🔧 Technologies Used in Level 2
+### 📝 Endpoints (Level 2)
+
+| Method | Endpoint | Description | Request Body | Response |
+|--------|----------|-------------|--------------|----------|
+| GET | `/users` | List all users | - | Array of users |
+| GET | `/users?name={name}` | Filter users by name | - | Filtered array |
+| POST | `/users` | Create a new user | `{"name": "Ada", "email": "ada@example.com"}` | Created user with UUID |
+| GET | `/users/{id}` | Get user by ID | - | User or 404 |
+
+## 📊 Level 3: Layered Architecture & Professional Practices
+
+The third level refactors the application into a professional layered architecture, applying SOLID principles, TDD, 
+and advanced testing strategies.
+
+### ✅ Key Achievements
+
+| Concept | Implementation |
+|---------|----------------|
+| **Layered Architecture** | Clear separation: Controller → Service → Repository |
+| **Repository Pattern** | `UserRepository` interface with `InMemoryUserRepository` implementation |
+| **Service Layer** | `UserService` with business logic and validation |
+| **Dependency Injection** | Constructor-based injection with Spring IoC |
+| **TDD (Test-Driven Development)** | Email uniqueness validation implemented with RED-GREEN-REFACTOR |
+| **Custom Exceptions** | `UserNotFoundException` (404) and `EmailAlreadyExistsException` (409) |
+| **Global Exception Handling** | `@ControllerAdvice` with consistent error responses |
+| **Unit Tests with Mockito** | `UserServiceImpl` tested in isolation with mocked repository |
+| **Integration Tests** | Full-stack testing with `@SpringBootTest` and MockMvc |
+| **Code Coverage** | >85% coverage across all layers |
+
+### 🏛️ Architecture Diagram
+
+┌─────────────────────────────────────────────────────────────┐
+│                    PRESENTATION LAYER                       │
+│                     UserController                          │
+│  Responsibility: Receive HTTP requests, validate inputs,    │
+│  return responses. DOES NOT contain business logic.         │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                     SERVICE LAYER                           │
+│                      UserService                            │
+│  Responsibility: Business logic, validations, application   │
+│  rules. Orchestrates operations.                            │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                    REPOSITORY LAYER                         │
+│                    UserRepository                           │
+│  Responsibility: Data access. In-memory, database, external │
+│  API. The rest of the system doesn't know how data is stored│
+└─────────────────────────────────────────────────────────────┘
+
+### 📝 Endpoints (Level 3)
+
+| Method | Endpoint | Description | Response Code | Response |
+|--------|----------|-------------|---------------|----------|
+| POST | `/users` | Create user with email validation | 201 Created | User with UUID |
+| POST | `/users` | Duplicate email | 409 Conflict | `{"message": "Email already exists: ..."}` |
+| GET | `/users/{id}` | Get user by ID (existing) | 200 OK | User object |
+| GET | `/users/{id}` | Get user by ID (non-existent) | 404 Not Found | `{"message": "User not found with id: ..."}` |
+
+### 🔧 Technologies Used in Level 3
 
 | Technology | Purpose |
 |------------|---------|
-| Spring Boot 3.2.11 | Framework core |
-| Spring Web | REST controllers and HTTP handling |
-| Java UUID | Unique identifier generation |
-| Java Streams | Filtering collections with `filter()` and `collect()` |
-| MockMvc | Web layer testing without server |
-| JUnit 5 | Test framework |
-| ObjectMapper | Java ↔ JSON conversion in tests |
-
----
+| **Spring Boot 3.2.11** | Application framework |
+| **Spring Web** | REST controllers and HTTP handling |
+| **Spring Boot Test** | Integration testing with `@SpringBootTest` |
+| **MockMvc** | Web layer testing without server |
+| **Mockito** | Unit testing with mocks (`@Mock`, `@InjectMocks`) |
+| **JUnit 5** | Test framework |
+| **AssertJ** | Fluent assertions |
+| **Jackson** | JSON serialization/deserialization |
+| **Maven Wrapper** | Build tool without global installation |
 
 ## 🏗️ Project Architecture
 
@@ -104,108 +146,87 @@ Following **SOLID** principles and **Layered Architecture**, the application is 
 
 ### Directory Hierarchy
 
-```text
+
 userapi
 ├── src/main/java/cat/itacademy/s04/t01/userapi
-│   ├── UserapiApplication.java   # Main application entry point
-│   ├── controller/               # REST endpoints (Health & User)
+│   ├── UserapiApplication.java          # Main application entry point
+│   ├── controller/                       # REST endpoints
 │   │   ├── HealthController.java
 │   │   └── UserController.java
-│   ├── service/                  # Business logic layer (prepared for Level 3)
-│   ├── repository/               # Data access layer (prepared for Level 3)
-│   ├── model/                    # Domain models
+│   ├── service/                          # Business logic layer
+│   │   ├── UserService.java              # Interface
+│   │   └── UserServiceImpl.java          # Implementation with @Service
+│   ├── repository/                       # Data access layer
+│   │   ├── UserRepository.java           # Interface
+│   │   └── InMemoryUserRepository.java   # Implementation with @Repository
+│   ├── model/                            # Domain models
 │   │   ├── HealthResponse.java
 │   │   └── User.java
-│   └── exception/                # Custom exceptions (prepared for Level 3)
-├── src/test/java/                # Full test suite
-│   └── controller/               # Web layer tests with MockMvc
-│       ├── HealthControllerTest.java
-│       └── UserControllerTest.java
+│   └── exception/                        # Custom exceptions
+│       ├── EmailAlreadyExistsException.java
+│       ├── UserNotFoundException.java
+│       └── GlobalExceptionHandler.java
+├── src/test/java/                        # Full test suite
+│   ├── controller/
+│   │   ├── HealthControllerTest.java
+│   │   └── UserControllerIntegrationTest.java
+│   ├── service/
+│   │   └── UserServiceImplTest.java      # Unit tests with Mockito
+│   ├── repository/
+│   │   └── InMemoryUserRepositoryTest.java
+│   └── UserapiApplicationTests.java
 ├── src/main/resources/
-│   └── application.properties    # Configuration (server.port=9000)
-└── target/                       # Compiled artifacts (.jar)
-```
+│   └── application.properties            # Configuration (server.port=9000)
+└── target/                               # Compiled artifacts (.jar)
 
----
+##  SOLID Principles Applied
+- Single Responsibility: Controller handles HTTP, Service handles business logic, Repository handles data access
+- Open/Closed: New repository implementations can be added without modifying Service
+- Liskov Substitution: Any UserRepository implementation can replace InMemoryUserRepository
+- Interface Segregation: UserRepository interface has focused, specific methods
+- Dependency Inversion: Service depends on UserRepository interface, not concrete implementation
 
-## 📌 Project Evolution Strategy
+##  Project Checkpoints
+This repository contains the complete evolution of the project. Key checkpoints are marked with tags:
 
-This project is developed in three progressive levels. To maintain a clear history 
-and facilitate evaluation, the following Git structure has been adopted:
+Level	Tag / Branch	Description	How to access
+Level 1	level1-completed	Health check endpoint, JSON responses, tests, JAR packaging	GitHub → Tags → level1-completed
+Level 2	level2-completed	Complete user CRUD with in-memory persistence	GitHub → Tags → level2-completed
+Level 3	level3-refactoring branch	Layered architecture, TDD, global exception handling	GitHub → Branch selector → level3-refactoring
 
-- **Branch `main`**: Contains the complete work from Levels 1 and 2
-- **Tag `level2-completed`**: Marks the exact state after completing Level 2
-- **Branch `level3-refactoring`**: Contains the ongoing work for Level 3
 
-### How to review
-
-| Level | Branch / Tag | Command to checkout |
-|-------|--------------|---------------------|
-| Level 1 | `main` (initial commits) | `git checkout main` |
-| Level 2 | `level2-completed` tag | `git checkout level2-completed` |
-| Level 3 | `level3-refactoring` branch | `git checkout level3-refactoring` |
-
----
-
-## 🚀 Key Features
-
-### 🛠️ User Management
-* **Unique Email Validation**: Implemented in the service layer to prevent duplicate registrations.
-* **ID Generation**: Centralized use of `UUID` managed by the service before persistence.
-* **Advanced Search**: User filtering by name with support for partial matches and *case-insensitive* search.
-* **Health Check**: Structured endpoint at `/health` for basic system monitoring.
-
-### ⚠️ Global Error Handling
-Use of custom exceptions annotated with `@ResponseStatus`:
-* `NotFoundByIdException` -> **404 Not Found**
-* `EmailAlreadyExistsException` -> **409 Conflict**
-
----
-
-## 🛠️ Patterns and Technologies
-
+## Patterns and Technologies
 To ensure software quality, the following concepts have been applied:
 
-1. **Inversion of Control (IoC)**: Dependency injection via constructor.
-2. **Repository Abstraction**: The service depends on an interface, allowing migration from an in-memory list to a real database without logic changes.
-3. **Clean Code**: Descriptive naming, short methods, and strict separation of concerns.
+1. Inversion of Control (IoC): Dependency injection via constructor.
+2. Repository Abstraction: The service depends on an interface, allowing migration from an in-memory list to a real database without logic changes.
+3. Clean Code: Descriptive naming, short methods, and strict separation of concerns.
 
-| Technology | Usage |
-| :--- | :--- |
-| **Java 21** | Main language and business logic |
-| **Spring Web** | Creation of REST controllers |
-| **Mockito** | Dependency mocking in unit tests |
-| **Jackson** | Automatic JSON serialization/deserialization |
+### Technology Usage
+- Java 21: Main language and business logic
+- Spring Web: Creation of REST controllers
+- Mockito: Dependency mocking in unit tests
+- Jackson; Automatic JSON serialization/deserialization
 
----
+## Technology Usage
+- Java 21: Main language and business logic
+- Spring Boot: Application framework
+- Spring Web: REST controllers and HTTP handling
+- Spring Boot Test: Integration testing
+- MockMvc: Web layer testing
+- Mockito: Unit testing with mocks
+- JUnit 5: Test framework
+- AssertJ: Fluent assertions
+- Jackson: Automatic JSON serialization/deserialization
+- Maven Wrapper: Build tool without global installation
 
-## 🧪 Testing Strategy
-
-Maximum code coverage was achieved through:
-
-* **Unit Tests**: Isolated validation of `UserService` logic using Mocks.
-* **Web Layer Tests**: Controller testing using `@WebMvcTest`.
-* **Integration Tests**: End-to-end validation with `@SpringBootTest` and `MockMvc`.
-
-To run the tests:
-```bash
-mvn test
-```
-## 🚦 Installation and Execution
-
-1. **Clone the repository and compile:**
-```bash
-mvn clean package
-```
-2. **Run the generated file:**
-```bash
-java -jar target/userapi-0.0.1-SNAPSHOT.jar
-```
-3. **Main Endpoints:**
-* **GET /health** - Check service status.
-* **POST /users** - Create a user (JSON body).
-* **GET /users?name=ana** - Filter users.
-
----
-
+## Installation and Execution
+- Java 21 or higher
+- Git
+- git clone https://github.com/ecantosf/userapi.git
+- Main Endpoints:
+	-- GET /health - Check service status.
+	-- POST /users - Create a user (JSON body).
+	-- GET /users?name=ana - Filter users.
+	
 **Final Note**: This project serves as a foundation for a scalable architecture, ready to integrate persistent databases such as MySQL or MongoDB.
