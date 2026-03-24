@@ -1,5 +1,6 @@
 package cat.itacademy.s04.t01.userapi.service;
 
+import cat.itacademy.s04.t01.userapi.exception.EmailAlreadyExistsException;
 import cat.itacademy.s04.t01.userapi.model.User;
 import cat.itacademy.s04.t01.userapi.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(String name, String email) {
-        // TODO: Email uniqueness validation will be added in TDD step
+        if (userRepository.existsByEmail(email)) {
+            throw new EmailAlreadyExistsException(email);
+        }
+
         UUID id = UUID.randomUUID();
         User user = new User(id, name, email);
         return userRepository.save(user);
@@ -33,7 +37,6 @@ public class UserServiceImpl implements UserService {
     public User getUserById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-        // TODO: Replace with UserNotFoundException in exception handling step
     }
 
     @Override
