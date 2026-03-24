@@ -33,4 +33,18 @@ class UserServiceImplTest {
         user.setEmail(email);
         return user;
     }
+
+    @Test
+    void createUser_shouldThrowExceptionWhenEmailAlreadyExists() {
+        String existingEmail = "john@mail.com";
+        String name = "John Lennon";
+
+        when(userRepository.existsByEmail(existingEmail)).thenReturn(true);
+
+        assertThatThrownBy(() -> userService.createUser(name, existingEmail))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Email already exists");
+
+        verify(userRepository, never()).save(any(User.class));
+    }
 }
