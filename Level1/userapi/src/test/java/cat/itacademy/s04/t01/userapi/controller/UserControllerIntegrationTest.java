@@ -136,7 +136,7 @@ class UserControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(firstUser)))
                 .andExpect(status().isOk());
-        
+
         User duplicateUser = new User();
         duplicateUser.setName("Ringo Starr");
         duplicateUser.setEmail("george@mail.com");  // MATEIX email que el primer
