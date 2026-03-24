@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.hamcrest.Matchers.*;
 
 @WebMvcTest(UserController.class)
-class UserControllerTest {
+class UserControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
