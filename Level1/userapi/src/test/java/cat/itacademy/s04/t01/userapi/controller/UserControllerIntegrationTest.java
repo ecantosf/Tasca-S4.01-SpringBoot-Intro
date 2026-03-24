@@ -125,4 +125,28 @@ class UserControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
+
+    @Test
+    void createUser_shouldReturn409WhenEmailAlreadyExists() throws Exception {
+        User firstUser = new User();
+        firstUser.setName("George Harrison");
+        firstUser.setEmail("george@mail.com");
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(firstUser)))
+                .andExpect(status().isOk());
+        
+        User duplicateUser = new User();
+        duplicateUser.setName("Ringo Starr");
+        duplicateUser.setEmail("george@mail.com");  // MATEIX email que el primer
+
+        mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(duplicateUser)))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.status").value(409))
+                .andExpect(jsonPath("$.error").value("Conflict"))
+                .andExpect(jsonPath("$.message").value("Email already exists: george@mail.com"));
+    }
 }

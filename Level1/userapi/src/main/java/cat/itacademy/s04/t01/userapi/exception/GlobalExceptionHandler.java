@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
 
         return body;
     }
-    
+
     private String extractPath(WebRequest request) {
         String description = request.getDescription(false);
         if (description != null && description.startsWith("uri=")) {
