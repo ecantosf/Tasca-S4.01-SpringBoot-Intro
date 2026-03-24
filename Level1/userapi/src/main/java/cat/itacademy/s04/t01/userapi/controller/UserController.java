@@ -1,48 +1,37 @@
 package cat.itacademy.s04.t01.userapi.controller;
 
 import cat.itacademy.s04.t01.userapi.model.User;
+import cat.itacademy.s04.t01.userapi.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private List<User> users = new ArrayList<>();
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
     public List<User> getUsers(@RequestParam(required = false) String name) {
         if (name == null || name.trim().isEmpty()) {
-            return users;
+            return userService.getAllUsers();
         }
-        return users.stream()
-                .filter(user -> user.getName().toLowerCase()
-                        .contains(name.toLowerCase()))
-                .collect(Collectors.toList());
+        return userService.searchUsersByName(name);
     }
 
     @PostMapping
     public User createUser(@RequestBody User user) {
-        UUID id = UUID.randomUUID();
-        user.setId(id);
-        users.add(user);
-        return user;
+        return userService.createUser(user.getName(), user.getEmail());
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable String id) {
-        UUID uuid = UUID.fromString(id);
-        return users.stream()
-                .filter(user -> user.getId().equals(uuid))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-    }
-
-    void clearUsers() {
-        users.clear();
+    public User getUserById(@PathVariable UUID id) {
+        return userService.getUserById(id);
     }
 }
